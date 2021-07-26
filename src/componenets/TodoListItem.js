@@ -3,20 +3,31 @@ import {MdCheckBoxOutlineBlank, MdCheckBox, MdRemoveCircleOutline} from 'react-i
 import styled from 'styled-components';
 import cn from 'classnames';
 
-const TodoListItem = ({todo, onRemove, onToggle}) => {
+const TodoListItem = ({todo, onRemove, onToggle, style}) => {
     const {id, text, checked} = todo;
     return (
-        <ListItem>
-            <div onClick={() => onToggle(id)} className={cn('checkbox', {checked})}>
-                {checked ? <MdCheckBox/> : <MdCheckBoxOutlineBlank/> }
-                <div className="text">{text}</div>
-            </div>
-            <div onClick={() => onRemove(id)} className="remove">
-                <MdRemoveCircleOutline/>
-            </div>
-        </ListItem>
+        <ListContainer style={style}>
+            <ListItem>
+                <div onClick={() => onToggle(id)} className={cn('checkbox', {checked})}>
+                    {checked ? <MdCheckBox/> : <MdCheckBoxOutlineBlank/> }
+                    <div className="text">{text}</div>
+                </div>
+                <div onClick={() => onRemove(id)} className="remove">
+                    <MdRemoveCircleOutline/>
+                </div>
+            </ListItem>
+        </ListContainer>
     )
 }
+
+const ListContainer = styled.div`
+    &+&{
+        border-top: 1px solid #dee2e6;
+    }
+    &:nth-child(even){
+        background:#f8f9fa;
+    }
+`
 
 const ListItem = styled.div`
     padding:1rem;
@@ -61,4 +72,4 @@ const ListItem = styled.div`
         border-top: 1px solid #dee2e6;
     }
 `
-export default React.memo(TodoListItem)
+export default React.memo(TodoListItem, (prevProps, nextProps) => prevProps.todo === nextProps.todo,);
